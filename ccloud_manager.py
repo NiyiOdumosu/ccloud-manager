@@ -129,7 +129,6 @@ supported_actions = (
 @click.argument('action', type=click.Choice(supported_actions))
 @click.option('--config',  help='The path to the connector config file ')
 @click.option('--cluster',   help='The id of the cluster')
-@click.option('--serv_acct',   help='The service account that an api-key is added to')
 @click.option('--description',   help='The description of the service account')
 @click.option('--id',   help='The id of the kafka component')
 @click.option('--name',  help='The name of the ksql db app or service account')
