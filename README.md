@@ -1,6 +1,6 @@
 # ccloud-manager
 
-The ccloud-manager allows users to create, describe and delete components in the ccloud clusters. 
+The ccloud-manager allows users to create, describe and delete components in the Confluent Cloud (ccloud) clusters. 
 Currently, ccloud-manager supports the management of the following components:
 
 * Connectors
