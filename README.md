@@ -19,11 +19,11 @@ and the action (create, describe, delete, list and update) as required parameter
 The optional parameters (which in some cases aren't optional) specify resource locators that identify which resources need to have an action performed on.
 Below are the resource locators parameters for the ccloud components:
 
---config, The path to the connector config file 
---cluster,  The id of the cluster
---description, The description of the service account
---id,  The id of the ccloud component
---name, The name of the ksql db app or service account  
+* --config, The path to the connector config file 
+* --cluster,  The id of the cluster
+* --description, The description of the service account
+* --id,  The id of the ccloud component
+* --name, The name of the ksql db app or service account  
 
 ## Connector Management
 
