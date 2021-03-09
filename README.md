@@ -84,13 +84,3 @@ In order to list all the existing service accounts, just add list.
 In order to update an existing service account, one must specify the service account id and it's description.
 `python3 ccloud_component.py service-account describe --id {service-account-id} --description {description}`
 
-
-## Api-Keys Management
-
-### Create
-
-### Describe
-
-### Delete
-
-### List 

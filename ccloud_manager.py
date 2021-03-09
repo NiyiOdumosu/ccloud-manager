@@ -102,50 +102,15 @@ class CCLoudServiceAccount:
         subprocess.run(['ccloud', 'service-account', 'list'])
 
 
-class CCLoudApiKey:
-
-    def create_api_key(self, resource,  service_account, description, output, environment,):
-        """ Create a new api key
-
-        Args:
-            name: str, the name of the api key
-        """
-        subprocess.run(['ccloud', 'api-key', 'create', resource, service_account, description, output, environment])
-
-    def delete_api_key(self, api_key):
-        """ Delete a api key
-
-        Args:
-           api_key: str, the ccloud api_key you wish to delete. It will delete the api secret as well
-        """
-        subprocess.run(['ccloud', 'api-key',  'delete', api_key])
-
-    def update_api_key(self, api_key, description):
-        """ Update the description of an existing api key
-
-        Args:
-            api_key: str, the ccloud api_key you wish to update
-            description: str, the description of the ccloud api key
-        """
-        subprocess.run(['ccloud', 'api-key',  'update', api_key, description])
-
-    def list_api_keys(self,):
-        """ List all the api keys in your environment
-        """
-        subprocess.run(['ccloud', 'api-key', 'list'])
-
 supported_components = {
     'ksql': {
         'class': CCLoudKsqlDB(),
-
     },
     'connector': {
         'class': CCLoudConnector(),
-
     },
     'service_account': {
         'class': CCLoudServiceAccount(),
-
     }
 }
 
@@ -164,13 +129,13 @@ supported_actions = (
 @click.argument('action', type=click.Choice(supported_actions))
 @click.option('--config',  help='The path to the connector config file ')
 @click.option('--cluster',   help='The id of the cluster')
+@click.option('--serv_acct',   help='The service account that an api-key is added to')
 @click.option('--description',   help='The description of the service account')
 @click.option('--id',   help='The id of the kafka component')
-@click.option('--name',  help='The name of the ksql db app or service account ' )
+@click.option('--name',  help='The name of the ksql db app or service account')
 def main(component, action, config, cluster, description, id, name):
     login_to_ccloud()
     if component == 'connector':
-
         if action == 'create':
             getattr(supported_components[component]['class'],
                     f'{action}_{component}_app')(cluster, config)
@@ -191,20 +156,6 @@ def main(component, action, config, cluster, description, id, name):
         else:
             getattr(supported_components[component]['class'],
                     f'{action}_{component}_apps')()
-
-    elif component =='api-key':
-        if action == 'create':
-            getattr(supported_components[component]['class'],
-                    f'{action}_{component}')(name)
-        elif action == 'delete':
-            getattr(supported_components[component]['class'],
-                    f'{action}_{component}')(id)
-        elif action == 'update':
-            getattr(supported_components[component]['class'],
-                    f'{action}_{component}')(id, description)
-        else:
-            getattr(supported_components[component]['class'],
-                    f'{action}_{component}s')()
 
     else:
         if action == 'create':
