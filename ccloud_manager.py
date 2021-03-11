@@ -101,6 +101,51 @@ class CCLoudServiceAccount:
         """
         subprocess.run(['ccloud', 'service-account', 'list'])
 
+class CCLoudApiKey:
+
+    def create_api_key(self, resource,  service_account, description, output, environment):
+        """ Create a new api key
+
+        Args:
+            name: str, the name of the api key
+        """
+        subprocess.run(['ccloud', 'api-key', 'create', resource, service_account, description, output, environment])
+
+    def delete_api_key(self, api_key):
+        """ Delete a api key
+
+        Args:
+           api_key: str, the ccloud api_key you wish to delete. It will delete the api secret as well
+        """
+        subprocess.run(['ccloud', 'api-key',  'delete', api_key])
+
+    def update_api_key(self, api_key, description):
+        """ Update the description of an existing api key
+
+        Args:
+            api_key: str, the ccloud api_key you wish to update
+            description: str, the description of the ccloud api key
+        """
+        subprocess.run(['ccloud', 'api-key',  'update', api_key, '--description', description])
+
+    def store_api_key(self, api_key):
+        """ Describe an existing connector app
+
+        Args:
+            api_key: str, the ccloud api_key
+        """
+        subprocess.run(['ccloud', 'api-key',  'store', api_key])
+
+    def list_api_keys(self,):
+        """ List all the api keys in your environment
+        """
+        subprocess.run(['ccloud', 'api-key', 'list'])
+
+    def use_api_keys(self, api_key, id):
+        """ List all the api keys in your environment
+        """
+        subprocess.run(['ccloud', 'api-key', 'use', api_key, '--resource', id])
+
 
 supported_components = {
     'ksql': {
@@ -111,6 +156,10 @@ supported_components = {
     },
     'service_account': {
         'class': CCLoudServiceAccount(),
+    },
+
+    'api_key': {
+        'class': CCLoudApiKey(),
     }
 }
 
@@ -120,7 +169,9 @@ supported_actions = (
     'delete',
     'describe',
     'list',
-    'update'
+    'update',
+    'use',
+    'store'
 )
 
 
@@ -132,7 +183,10 @@ supported_actions = (
 @click.option('--description',   help='The description of the service account')
 @click.option('--id',   help='The id of the kafka component')
 @click.option('--name',  help='The name of the ksql db app or service account')
-def main(component, action, config, cluster, description, id, name):
+@click.option('--environment',  help='The name of the environment')
+@click.option('--serv_acct',   help='The service account that an api-key is added to')
+@click.option('--api_key',  help='The name of the api key')
+def main(component, action, config, cluster, description, id, name, serv_acct, output, environment, api_key):
     login_to_ccloud()
     if component == 'connector':
         if action == 'create':
@@ -156,6 +210,19 @@ def main(component, action, config, cluster, description, id, name):
             getattr(supported_components[component]['class'],
                     f'{action}_{component}_apps')()
 
+    elif component == 'api_key':
+        if action == 'create':
+            getattr(supported_components[component]['class'],
+                    f'{action}_{component}')(id, serv_acct, id, output, environment)
+        elif action == 'delete':
+            getattr(supported_components[component]['class'],
+                    f'{action}_{component}')(api_key)
+        elif action == 'update':
+            getattr(supported_components[component]['class'],
+                    f'{action}_{component}')(id, description)
+        else:
+            getattr(supported_components[component]['class'],
+                    f'{action}_{component}s')()
     else:
         if action == 'create':
             getattr(supported_components[component]['class'],
