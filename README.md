@@ -6,7 +6,6 @@ Currently, ccloud-manager supports the management of the following components:
 * Connectors
 * ksqlDBs
 * Service Accounts
-* Api-Keys
 
 Ccloud-Manager serves as a python wrapper for the ccloud CLI. 
 This provides a reusable and testable artifact for those who need to create and manage ccloud resources.
